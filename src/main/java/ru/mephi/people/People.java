@@ -1,5 +1,7 @@
 package ru.mephi.people;
 
+import ru.mephi.Library;
+import ru.mephi.Request;
 import ru.mephi.books.Book;
 import ru.mephi.books.BookException;
 
@@ -8,7 +10,7 @@ import java.util.Set;
 
 public abstract class People {
 
-    private Set<String> bookList;
+    private Set<Book> bookList;
     private Skills skills;
     protected String name;
     protected String surname;
@@ -36,12 +38,35 @@ public abstract class People {
         }
     }
 
-    public void takeBook(Book book) throws BookException {
+    public void takeBook(Book book, Library library) throws BookException {
         getBookList();
-        bookList.add(book.toString());
+        Request request = new Request(book, this);
+        if (library.getAvailableBooks().get(book) > 0) {
+            bookList.add(book);
+        }
+        else {
+            book.getBookRequests().add(request);
+            library.getRequestLine().put(book, book.getBookRequests());
+        }
     }
 
-    public Set<String> getBookList() {
+    public void returnBook(Book book, Library library) throws BookException {
+        bookList.remove(book);
+        try {
+            Request request = (Request) library.getRequestLine().get(book).poll();
+            if (request != null) {
+                request.getPerson().takeBook(book, library);
+            }
+            else {
+                library.getAvailableBooks().put(book, library.getAvailableBooks().get(book) + 1);
+            }
+        }
+        catch (NullPointerException e) {
+            library.getAvailableBooks().put(book, library.getAvailableBooks().get(book) + 1);
+        }
+    }
+
+    public Set<Book> getBookList() {
         if (bookList == null) {
             bookList = new HashSet<>();
         }
