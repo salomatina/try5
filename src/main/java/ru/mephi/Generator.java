@@ -105,18 +105,25 @@ public class Generator {
             if (lang == 0) {
                 int skl = randomizer.getSkillsNumber();
                 Skills skills;
-                if (skl == 1) {
-                    skills = Skills.A1;
-                } else if (skl == 2) {
-                    skills = Skills.A2;
-                } else if (skl == 3) {
-                    skills = Skills.B1;
-                } else if (skl == 4) {
-                    skills = Skills.B2;
-                } else if (skl == 5) {
-                    skills = Skills.C1;
-                } else {
-                    skills = Skills.C2;
+                switch (skl) {
+                    case 1:
+                        skills = Skills.A1;
+                        break;
+                    case 2:
+                        skills = Skills.A2;
+                        break;
+                    case 3:
+                        skills = Skills.B1;
+                        break;
+                    case 4:
+                        skills = Skills.B2;
+                        break;
+                    case 5:
+                        skills = Skills.C1;
+                        break;
+                    default:
+                        skills = Skills.C2;
+                        break;
                 }
                 XSSFSheet sheet = workbook.getSheetAt(3);
                 int nameNum = randomizer.getRandom(1, 15);
@@ -186,7 +193,19 @@ public class Generator {
     public void randomMove(Library library) throws BookException {
         People person = getRandomPerson(library);
         Book book = getRandomBook(library);
+        int sizeBefore = person.getBookList().size();
         person.takeBook(book, library);
+        while (person.getBookList().size() == sizeBefore) {
+            int n = randomizer.getBinaryNumber();
+            if (n == 0) {
+                person = getRandomPerson(library);
+                sizeBefore = person.getBookList().size();
+            }
+            else {
+                book = getRandomBook(library);
+            }
+            person.takeBook(book, library);
+        }
     }
 
 

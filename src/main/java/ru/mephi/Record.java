@@ -5,8 +5,8 @@ import ru.mephi.people.People;
 
 public class Record {
     private int length;
-    private Book book;
-    private People person;
+    private final Book book;
+    private final People person;
 
     public Record(Book book, People person) {
         length = 3;

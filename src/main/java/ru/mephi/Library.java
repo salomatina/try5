@@ -12,13 +12,13 @@ public class Library {
 
     private final List<Student> students;
     private final List<Teacher> teachers;
-    private Map<Book, Integer> availableBooks;
-    private List<Book> bookList; // need that to take random book (to get it from index)
-    private Map<Book, Queue> requestLine;
-    private List<Record> takenBooks;
+    private final Map<Book, Integer> availableBooks;
+    private final List<Book> bookList; // need that to take random book (to get it from index)
+//    private final Map<Book, Queue> requestLine;
+    private final List<Record> takenBooks;
 
     private Library() {
-        requestLine = new HashMap<>();
+//        requestLine = new HashMap<>();
         students = new ArrayList<>();
         teachers = new ArrayList<>();
         availableBooks = new HashMap<>();
@@ -33,9 +33,9 @@ public class Library {
         return instance;
     }
 
-    public Map<Book, Queue> getRequestLine() {
-        return requestLine;
-    }
+//    public Map<Book, Queue> getRequestLine() {
+//        return requestLine;
+//    }
 
     public List<Student> getStudents() {
         return students;

@@ -18,23 +18,25 @@ public abstract class People {
     public People(String name, String surname, int skl) {
         this.name = name;
         this.surname = surname;
-        if (skl == 1) {
-            skills = Skills.A1;
-        }
-        else if (skl == 2) {
-            skills = Skills.A2;
-        }
-        else if (skl == 3) {
-            skills = Skills.B1;
-        }
-        else if (skl == 4) {
-            skills = Skills.B2;
-        }
-        else if (skl == 5) {
-            skills = Skills.C1;
-        }
-        else {
-            skills = Skills.C2;
+        switch (skl) {
+            case 1:
+                skills = Skills.A1;
+                break;
+            case 2:
+                skills = Skills.A2;
+                break;
+            case 3:
+                skills = Skills.B1;
+                break;
+            case 4:
+                skills = Skills.B2;
+                break;
+            case 5:
+                skills = Skills.C1;
+                break;
+            default:
+                skills = Skills.C2;
+                break;
         }
     }
 
@@ -45,25 +47,27 @@ public abstract class People {
             bookList.add(book);
         }
         else {
-            book.getBookRequests().add(request);
-            library.getRequestLine().put(book, book.getBookRequests());
+            if (!book.getBookRequests().contains(request)) {
+                book.getBookRequests().add(request);
+//                library.getRequestLine().put(book, book.getBookRequests());
+                System.out.println("request " + this.getName() + " " + book);
+            }
         }
     }
 
     public void returnBook(Book book, Library library) throws BookException {
         bookList.remove(book);
-        try {
-            Request request = (Request) library.getRequestLine().get(book).poll();
-            if (request != null) {
-                request.getPerson().takeBook(book, library);
-            }
-            else {
-                library.getAvailableBooks().put(book, library.getAvailableBooks().get(book) + 1);
-            }
-        }
-        catch (NullPointerException e) {
             library.getAvailableBooks().put(book, library.getAvailableBooks().get(book) + 1);
-        }
+            try {
+                Request request = book.getBookRequests().poll();
+                if (request != null) {
+                    request.getPerson().takeBook(book, library);
+                    System.out.println(" book was taken " + request.getPerson().toString() +
+                            " " + book);
+                }
+            }
+            catch (NullPointerException ignored) {
+            }
     }
 
     public Set<Book> getBookList() {

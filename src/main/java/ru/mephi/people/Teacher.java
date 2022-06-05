@@ -39,8 +39,19 @@ public class Teacher extends People {
         }
         else {
             Request request = new Request(book, this);
+            if (!book.getBookRequests().contains(request)) {
                 book.getBookRequests().add(request);
-                library.getRequestLine().put(book, book.getBookRequests());
+//                library.getRequestLine().put(book, book.getBookRequests());
+                System.out.println("request " + this + " " + book);
+            }
+            else {
+                System.out.println("request exists");
+            }
         }
+    }
+
+    @Override
+    public String toString() {
+        return getSurname() + " " + getName() + " " + getPatronymic();
     }
 }

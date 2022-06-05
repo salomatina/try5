@@ -57,9 +57,19 @@ public class Student extends People {
         }
         else {
             Request request = new Request(book, this);
-            book.getBookRequests().add(request);
-            library.getRequestLine().put(book, book.getBookRequests());
+            if (!book.getBookRequests().contains(request)) {
+                book.getBookRequests().add(request);
+//                library.getRequestLine().put(book, book.getBookRequests());
+                System.out.println("request " + this.toString() + " " + book);
+            }
+            else {
+                System.out.println("request exists");
+            }
         }
     }
 
+    @Override
+    public String toString() {
+        return getName() + " " + getSurname();
+    }
 }

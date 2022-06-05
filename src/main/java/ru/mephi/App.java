@@ -1,8 +1,6 @@
 package ru.mephi;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -17,9 +15,7 @@ import ru.mephi.people.Student;
 import ru.mephi.people.Teacher;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 public class App extends Application {
 
@@ -53,7 +49,7 @@ public class App extends Application {
         buttonImp.setPrefSize(80, 37);
         buttonImp.setOnAction(actionEvent -> {
             try {
-//                textAreaImp.setText("C:\\Users\\Елена\\IdeaProjects\\try5\\src\\main\\resources\\library.xlsx");
+                textAreaImp.setText("C:\\Users\\Елена\\IdeaProjects\\try5\\src\\main\\resources\\library.xlsx");
                 generator = new Generator(textAreaImp.getText());
                 library = generator.generateLibrary();
 
@@ -85,35 +81,32 @@ public class App extends Application {
 
         Button nextWeekButton = new Button("Next week");
         nextWeekButton.setPrefSize(410, 40);
-        nextWeekButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                for (int i = 0; i < library.getTakenBooks().size(); i++) {
-                    Record record = library.getTakenBooks().get(i);
-                    record.makeLengthShorter();
-                    if (record.getLength() == 0) {
-                        People person = record.getPerson();
-                        Book book = record.getBook();
-                        try {
-                            person.returnBook(book, library);
-                        }
-                        catch (BookException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                int n = (library.getStudents().size() + library.getTeachers().size()) / 4;
-                for (int i = 0; i < n; i++) {
+        nextWeekButton.setOnAction(actionEvent -> {
+            for (int i = 0; i < library.getTakenBooks().size(); i++) {
+                Record record = library.getTakenBooks().get(i);
+                record.makeLengthShorter();
+                if (record.getLength() == 0) {
+                    People person = record.getPerson();
+                    Book book = record.getBook();
                     try {
-                        generator.randomMove(library);
+                        person.returnBook(book, library);
                     }
                     catch (BookException e) {
                         e.printStackTrace();
                     }
                 }
-                createStudentsTreeView(library.getStudents());
-                createTeachersTreeView(library.getTeachers());
             }
+            int n = (library.getStudents().size() + library.getTeachers().size()) / 4;
+            for (int i = 0; i < n; i++) {
+                try {
+                    generator.randomMove(library);
+                }
+                catch (BookException e) {
+                    e.printStackTrace();
+                }
+            }
+            createStudentsTreeView(library.getStudents());
+            createTeachersTreeView(library.getTeachers());
         });
         Group weekGroup = new Group(nextWeekButton);
 
@@ -130,8 +123,7 @@ public class App extends Application {
     public void createTeachersTreeView(List<Teacher> teacherSet) {
         TreeItem<String> rootItem = new TreeItem<>("Teachers");
         for (Teacher teacher : teacherSet) {
-            TreeItem<String> branchItem = new TreeItem<>(teacher.getSurname()
-                    + " " + teacher.getName() + " " + teacher.getPatronymic());
+            TreeItem<String> branchItem = new TreeItem<>(teacher.toString());
             for (Book s : teacher.getBookList()) {
                 TreeItem<String> leafItem = new TreeItem<>(s.toString());
                 branchItem.getChildren().add(leafItem);
@@ -145,8 +137,7 @@ public class App extends Application {
     public void createStudentsTreeView(List<Student> studentSet) {
         TreeItem<String> rootItem = new TreeItem<>("Students");
         for (Student student : studentSet) {
-            TreeItem<String> branchItem = new TreeItem<>(student.getName() + " "
-            + student.getSurname());
+            TreeItem<String> branchItem = new TreeItem<>(student.toString());
             for (Book s : student.getBookList()) {
                 TreeItem<String> leafItem = new TreeItem<>(s.toString());
                 branchItem.getChildren().add(leafItem);

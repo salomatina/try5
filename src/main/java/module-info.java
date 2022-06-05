@@ -7,4 +7,6 @@ module ru.mephi {
 
     opens ru.mephi to javafx.fxml;
     exports ru.mephi;
+    exports ru.mephi.books;
+    exports ru.mephi.people;
 }
