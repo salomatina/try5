@@ -12,6 +12,7 @@ public abstract class Book {
     protected String name;
     protected String author;
     protected Queue<Request> bookRequests;
+    protected int number;
 
 
     public Book(String name, String author) {
@@ -40,4 +41,21 @@ public abstract class Book {
     public int hashCode() {
         return Objects.hash(language, name, author);
     }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public void reduceNumber() {
+        number--;
+    }
+
+    public void enlargeNumber() {
+        number++;
+    }
+
 }

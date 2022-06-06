@@ -1,11 +1,9 @@
 package ru.mephi.people;
 
 import ru.mephi.Library;
-import ru.mephi.Record;
-import ru.mephi.Request;
 import ru.mephi.books.*;
 
-public class Student extends People {
+public class Student extends Person {
 
     private final Degree degree;
 
@@ -31,41 +29,10 @@ public class Student extends People {
         return surname;
     }
 
+
     @Override
     public void takeBook(Book book, Library library) throws BookException {
-        if (book.getLanguage().equals(Language.ENGLISH)) {
-            if (book instanceof Textbook) {
-                if (((Textbook) book).getLevel() != getDegree()) {
-                    return;
-                }
-            }
-            else {
-                if (((Fiction) book).getSkills() != getSkills()) {
-                    return;
-                }
-            }
-        }
-        int numberOfBooks = library.getAvailableBooks().get(book);
-        if (numberOfBooks > 0) {
-            int sizeBefore = getBookList().size();
-            getBookList().add(book);
-            if (getBookList().size() > sizeBefore) {
-                library.getAvailableBooks().put(book, numberOfBooks - 1);
-                Record record = new Record(book, this);
-                library.getTakenBooks().add(record);
-            }
-        }
-        else {
-            Request request = new Request(book, this);
-            if (!book.getBookRequests().contains(request)) {
-                book.getBookRequests().add(request);
-//                library.getRequestLine().put(book, book.getBookRequests());
-                System.out.println("request " + this.toString() + " " + book);
-            }
-            else {
-                System.out.println("request exists");
-            }
-        }
+        library.giveBook(book, this);
     }
 
     @Override

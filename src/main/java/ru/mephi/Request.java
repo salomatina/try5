@@ -1,15 +1,15 @@
 package ru.mephi;
 
 import ru.mephi.books.Book;
-import ru.mephi.people.People;
+import ru.mephi.people.Person;
 
 import java.util.Objects;
 
 public class Request {
     private final Book book;
-    private final People person;
+    private final Person person;
 
-    public Request(Book book, People person) {
+    public Request(Book book, Person person) {
         this.book = book;
         this.person = person;
     }
@@ -31,7 +31,7 @@ public class Request {
         return book;
     }
 
-    public People getPerson() {
+    public Person getPerson() {
         return person;
     }
 }

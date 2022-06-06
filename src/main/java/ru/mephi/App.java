@@ -10,7 +10,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.mephi.books.Book;
 import ru.mephi.books.BookException;
-import ru.mephi.people.People;
+import ru.mephi.people.Person;
 import ru.mephi.people.Student;
 import ru.mephi.people.Teacher;
 
@@ -23,6 +23,7 @@ public class App extends Application {
     private TreeView<String> studentsTreeView = new TreeView<>();
     private Generator generator;
     private Library library;
+    private Engine engine;
 
     public static void main(String[] args) {
         launch(args);
@@ -30,6 +31,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        engine = new Engine();
         TextArea textAreaImp = new TextArea();
         textAreaImp.setEditable(false);
         Group groupTextAreaImp = new Group(textAreaImp);
@@ -50,7 +52,8 @@ public class App extends Application {
         buttonImp.setOnAction(actionEvent -> {
             try {
                 textAreaImp.setText("C:\\Users\\Елена\\IdeaProjects\\try5\\src\\main\\resources\\library.xlsx");
-                generator = new Generator(textAreaImp.getText());
+                generator = new Generator();
+                generator.setDataWorkbook(textAreaImp.getText());
                 library = generator.generateLibrary();
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -82,29 +85,7 @@ public class App extends Application {
         Button nextWeekButton = new Button("Next week");
         nextWeekButton.setPrefSize(410, 40);
         nextWeekButton.setOnAction(actionEvent -> {
-            for (int i = 0; i < library.getTakenBooks().size(); i++) {
-                Record record = library.getTakenBooks().get(i);
-                record.makeLengthShorter();
-                if (record.getLength() == 0) {
-                    People person = record.getPerson();
-                    Book book = record.getBook();
-                    try {
-                        person.returnBook(book, library);
-                    }
-                    catch (BookException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            int n = (library.getStudents().size() + library.getTeachers().size()) / 4;
-            for (int i = 0; i < n; i++) {
-                try {
-                    generator.randomMove(library);
-                }
-                catch (BookException e) {
-                    e.printStackTrace();
-                }
-            }
+            engine.makeAllMoves(library);
             createStudentsTreeView(library.getStudents());
             createTeachersTreeView(library.getTeachers());
         });

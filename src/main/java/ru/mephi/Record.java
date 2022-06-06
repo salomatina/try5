@@ -1,14 +1,14 @@
 package ru.mephi;
 
 import ru.mephi.books.Book;
-import ru.mephi.people.People;
+import ru.mephi.people.Person;
 
 public class Record {
     private int length;
     private final Book book;
-    private final People person;
+    private final Person person;
 
-    public Record(Book book, People person) {
+    public Record(Book book, Person person) {
         length = 3;
         this.book = book;
         this.person = person;
@@ -26,7 +26,7 @@ public class Record {
         return book;
     }
 
-    public People getPerson() {
+    public Person getPerson() {
         return person;
     }
 }
